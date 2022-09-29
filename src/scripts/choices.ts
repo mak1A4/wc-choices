@@ -1343,7 +1343,12 @@ class Choices implements Choices {
   }
 
   _addEventListeners(): void {
-    const { documentElement } = document;
+    let shadowRoot: ShadowRoot | null = null;
+    if (this.config.shadowRootSupport) {
+      // eslint-disable-next-line prefer-destructuring
+      shadowRoot = this.passedElement.element.shadowRoot;
+    }
+    const documentElement = shadowRoot || document.documentElement;
 
     // capture events - can cancel event processing or propagation
     documentElement.addEventListener('touchend', this._onTouchEnd, true);
@@ -1397,7 +1402,12 @@ class Choices implements Choices {
   }
 
   _removeEventListeners(): void {
-    const { documentElement } = document;
+    let shadowRoot: ShadowRoot | null = null;
+    if (this.config.shadowRootSupport) {
+      // eslint-disable-next-line prefer-destructuring
+      shadowRoot = this.passedElement.element.shadowRoot;
+    }
+    const documentElement = shadowRoot || document.documentElement;
 
     documentElement.removeEventListener('touchend', this._onTouchEnd, true);
     this.containerOuter.element.removeEventListener(

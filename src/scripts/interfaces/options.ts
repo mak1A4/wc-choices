@@ -15,6 +15,7 @@ import { Types } from './types';
  * - **Item:** An item is an inputted value **_(text input)_** or a selected choice **_(select element)_**. In the context of a select element, an item is equivelent to a selected option element: `<option value="Hello" selected></option>` whereas in the context of a text input an item is equivelant to `<input type="text" value="Hello">`
  */
 export interface Options {
+  shadowRootSupport: boolean;
   /**
    * Optionally suppress console errors and warnings.
    *

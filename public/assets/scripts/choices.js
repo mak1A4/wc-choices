@@ -1476,7 +1476,14 @@ function () {
   };
 
   Choices.prototype._addEventListeners = function () {
-    var documentElement = document.documentElement; // capture events - can cancel event processing or propagation
+    var shadowRoot = null;
+
+    if (this.config.shadowRootSupport) {
+      // eslint-disable-next-line prefer-destructuring
+      shadowRoot = this.passedElement.element.shadowRoot;
+    }
+
+    var documentElement = shadowRoot || document.documentElement; // capture events - can cancel event processing or propagation
 
     documentElement.addEventListener('touchend', this._onTouchEnd, true);
     this.containerOuter.element.addEventListener('keydown', this._onKeyDown, true);
@@ -1521,7 +1528,14 @@ function () {
   };
 
   Choices.prototype._removeEventListeners = function () {
-    var documentElement = document.documentElement;
+    var shadowRoot = null;
+
+    if (this.config.shadowRootSupport) {
+      // eslint-disable-next-line prefer-destructuring
+      shadowRoot = this.passedElement.element.shadowRoot;
+    }
+
+    var documentElement = shadowRoot || document.documentElement;
     documentElement.removeEventListener('touchend', this._onTouchEnd, true);
     this.containerOuter.element.removeEventListener('keydown', this._onKeyDown, true);
     this.containerOuter.element.removeEventListener('mousedown', this._onMouseDown, true);
@@ -3469,6 +3483,7 @@ exports.DEFAULT_CONFIG = {
   items: [],
   choices: [],
   silent: false,
+  shadowRootSupport: false,
   renderChoiceLimit: -1,
   maxItemCount: -1,
   addItems: true,
@@ -4614,7 +4629,7 @@ var templates = {
     div.setAttribute('aria-expanded', 'false');
 
     if (labelId) {
-      div.setAttribute('aria-labeledby', labelId);
+      div.setAttribute('aria-labelledby', labelId);
     }
 
     return div;
