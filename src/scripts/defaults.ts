@@ -35,7 +35,6 @@ export const DEFAULT_CONFIG: Options = {
   items: [],
   choices: [],
   silent: false,
-  shadowRootSupport: false,
   renderChoiceLimit: -1,
   maxItemCount: -1,
   addItems: true,

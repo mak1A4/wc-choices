@@ -19,6 +19,7 @@ declare class Choices implements Choices {
     initialised: boolean;
     config: Options;
     passedElement: WrappedInput | WrappedSelect;
+    shadowRoot?: ShadowRoot;
     containerOuter: Container;
     containerInner: Container;
     choiceList: List;
@@ -50,7 +51,7 @@ declare class Choices implements Choices {
     _presetOptions: Item[] | HTMLOptionElement[];
     _presetChoices: Partial<Choice>[];
     _presetItems: Item[] | string[];
-    constructor(element?: string | Element | HTMLInputElement | HTMLSelectElement, userConfig?: Partial<Options>);
+    constructor(element?: string | Element | HTMLInputElement | HTMLSelectElement, userConfig?: Partial<Options>, shadowRoot?: ShadowRoot);
     init(): void;
     destroy(): void;
     enable(): this;

@@ -276,7 +276,7 @@ var USER_DEFAULTS = {};
 var Choices =
 /** @class */
 function () {
-  function Choices(element, userConfig) {
+  function Choices(element, userConfig, shadowRoot) {
     var _this = this;
 
     if (element === void 0) {
@@ -289,6 +289,10 @@ function () {
 
     if (userConfig.allowHTML === undefined) {
       console.warn('Deprecation warning: allowHTML will default to false in a future release. To render HTML in Choices, you will need to set it to true. Setting allowHTML will suppress this message.');
+    }
+
+    if (shadowRoot) {
+      this.shadowRoot = shadowRoot;
     }
 
     this.config = deepmerge_1.default.all([defaults_1.DEFAULT_CONFIG, Choices.defaults.options, userConfig], // When merging array configs, replace with a copy of the userConfig array,
@@ -1476,14 +1480,7 @@ function () {
   };
 
   Choices.prototype._addEventListeners = function () {
-    var shadowRoot = null;
-
-    if (this.config.shadowRootSupport) {
-      // eslint-disable-next-line prefer-destructuring
-      shadowRoot = this.passedElement.element.shadowRoot;
-    }
-
-    var documentElement = shadowRoot || document.documentElement; // capture events - can cancel event processing or propagation
+    var documentElement = this.shadowRoot || document.documentElement; // capture events - can cancel event processing or propagation
 
     documentElement.addEventListener('touchend', this._onTouchEnd, true);
     this.containerOuter.element.addEventListener('keydown', this._onKeyDown, true);
@@ -1528,14 +1525,7 @@ function () {
   };
 
   Choices.prototype._removeEventListeners = function () {
-    var shadowRoot = null;
-
-    if (this.config.shadowRootSupport) {
-      // eslint-disable-next-line prefer-destructuring
-      shadowRoot = this.passedElement.element.shadowRoot;
-    }
-
-    var documentElement = shadowRoot || document.documentElement;
+    var documentElement = this.shadowRoot || document.documentElement;
     documentElement.removeEventListener('touchend', this._onTouchEnd, true);
     this.containerOuter.element.removeEventListener('keydown', this._onKeyDown, true);
     this.containerOuter.element.removeEventListener('mousedown', this._onMouseDown, true);
@@ -3483,7 +3473,6 @@ exports.DEFAULT_CONFIG = {
   items: [],
   choices: [],
   silent: false,
-  shadowRootSupport: false,
   renderChoiceLimit: -1,
   maxItemCount: -1,
   addItems: true,

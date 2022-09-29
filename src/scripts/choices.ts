@@ -83,6 +83,8 @@ class Choices implements Choices {
 
   passedElement: WrappedInput | WrappedSelect;
 
+  shadowRoot?: ShadowRoot;
+
   containerOuter: Container;
 
   containerInner: Container;
@@ -150,11 +152,15 @@ class Choices implements Choices {
       | HTMLInputElement
       | HTMLSelectElement = '[data-choice]',
     userConfig: Partial<Options> = {},
+    shadowRoot?: ShadowRoot,
   ) {
     if (userConfig.allowHTML === undefined) {
       console.warn(
         'Deprecation warning: allowHTML will default to false in a future release. To render HTML in Choices, you will need to set it to true. Setting allowHTML will suppress this message.',
       );
+    }
+    if (shadowRoot) {
+      this.shadowRoot = shadowRoot;
     }
 
     this.config = merge.all<Options>(
@@ -1343,12 +1349,7 @@ class Choices implements Choices {
   }
 
   _addEventListeners(): void {
-    let shadowRoot: ShadowRoot | null = null;
-    if (this.config.shadowRootSupport) {
-      // eslint-disable-next-line prefer-destructuring
-      shadowRoot = this.passedElement.element.shadowRoot;
-    }
-    const documentElement = shadowRoot || document.documentElement;
+    const documentElement = this.shadowRoot || document.documentElement;
 
     // capture events - can cancel event processing or propagation
     documentElement.addEventListener('touchend', this._onTouchEnd, true);
@@ -1402,12 +1403,7 @@ class Choices implements Choices {
   }
 
   _removeEventListeners(): void {
-    let shadowRoot: ShadowRoot | null = null;
-    if (this.config.shadowRootSupport) {
-      // eslint-disable-next-line prefer-destructuring
-      shadowRoot = this.passedElement.element.shadowRoot;
-    }
-    const documentElement = shadowRoot || document.documentElement;
+    const documentElement = this.shadowRoot || document.documentElement;
 
     documentElement.removeEventListener('touchend', this._onTouchEnd, true);
     this.containerOuter.element.removeEventListener(
